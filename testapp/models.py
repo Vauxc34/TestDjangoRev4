@@ -19,24 +19,7 @@ def __str__(self):
 
 class AlembicVersion(models.Model):
     version_num = models.CharField(primary_key=True, max_length=255)
-
-
-
-class Device(models.Model):
-    device_name = models.CharField(blank=True, null=True, max_length=255)
-    date = models.DateTimeField(blank=True, null=True)
-    device_model = models.CharField(blank=True, null=True, max_length=255)
-    device_ip = models.CharField(blank=True, null=True, max_length=255)
-    comm_protocol = models.CharField(blank=True, null=True, max_length=255)
-    user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        db_table = 'device'
-
-    def __str__(self):
-        return f"{self.device_name} ({self.device_ip})"
-
-
+ 
 class Note(models.Model):
     note = models.CharField(blank=True, null=True, max_length=255)
     sec = models.IntegerField(blank=True, null=True)
