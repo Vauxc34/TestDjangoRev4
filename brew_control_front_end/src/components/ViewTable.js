@@ -218,10 +218,9 @@ const ViewTable = () => {
   
   const [Doc, setDoc] = useState('')
   const [DocDesc, setDocDesc] = useState('')
-  const [DataToSet, setDataToSet] = useState([   ])
-  const [UpdatedData, setUpdatedData] = useState([])
-  //const [EstimatedHours, setEstimatedHours] = useState('')
-  const [EstimatedDate, setEstimatedDate] = useState('')
+  const [DataToSet, setDataToSet] = useState([])
+  const [UpdatedData, setUpdatedData] = useState([]) 
+  const [EstimatedRange, setEstimatedRange] = useState([])
   const [RangeTime, setRangeTime] = useState(20)
   const [NumberFields, setNumberFields] = useState(2)
   const [inputEnabled, setInputEnabled] = useState(true) 
@@ -229,8 +228,7 @@ const ViewTable = () => {
   const [Name, setName] = useState('')
   const [IPAddress, setIPAddress] = useState('')
   const [RegistrationFirst, setRegistrationFirst] = useState('')
-  const [RegistrationAmmount, setRegistrationAmmount] = useState('')
-
+  const [RegistrationAmmount, setRegistrationAmmount] = useState('') 
   let DatePickRef = useRef()
 
   const [DateUpdated, setDateUpdated] = useState(dayjs('2022-04-17'))
@@ -281,8 +279,7 @@ const ViewTable = () => {
     FetchTableName()
   }, [DataToSet])
 
-  const [itemNb, setItemNb] = useState(5);
-  const [seriesNb, setSeriesNb] = useState(2);
+  const [itemNb, setItemNb] = useState(5); 
 
     /* new chart */
   
@@ -324,16 +321,15 @@ const ViewTable = () => {
     },
   }; 
   
-  const indexToAccess = 0; // Index of the property you want to access
+  const indexToAccess = 0; 
   const newPropertyName = "FirstUserProperty";
   const newPropertyName1 = "SecondUserProperty";
   const newPropertyName2 = "ThirdUserProperty";      
   const newPropertyName3 = "FourthUserProperty";      
   const newPropertyName4 = "FifthUserProperty";      
-  const newPropertyName5 = "SixthUserProperty";      
-
+  const newPropertyName5 = "SixthUserProperty";   
   
-  const labels = DataToSet.map((obj, item, index) => {
+  let EstimatedR = DataToSet.map((obj, item, index) => {
     const updatedObj = { ...obj };   
     const keys = Object.keys(obj);
     for (let i = 0; i < keys.length; i++) {
@@ -347,27 +343,11 @@ const ViewTable = () => {
         } else {
             updatedObj[keys[i]] = obj[keys[i]];
         }
-    } 
-    return updatedObj.FirstUserProperty.slice(-9).slice(0,10)})
+    }  
 
-  /*console.log(
-    DataToSet.map((obj, item, index) => {
-      const updatedObj = { ...obj };   
-      const keys = Object.keys(obj);
-      for (let i = 0; i < keys.length; i++) {
-          if (i === indexToAccess) {
-              updatedObj[newPropertyName] = obj[keys[i]]; 
-              updatedObj[newPropertyName1] = obj[keys[1]];
-              updatedObj[newPropertyName2] = obj[keys[2]]; 
-              updatedObj[newPropertyName3] = obj[keys[3]]; 
-              updatedObj[newPropertyName4] = obj[keys[4]];
-              updatedObj[newPropertyName5] = obj[keys[5]];
-          } else {
-              updatedObj[keys[i]] = obj[keys[i]];
-          }
-      } 
-      return updatedObj.SixthUserProperty})
-  )*/
+    return updatedObj.FirstUserProperty.slice(-9)}) 
+  
+  const labels = EstimatedR.slice(0, RangeTime) 
 
   const data = {
     labels,
@@ -482,7 +462,6 @@ const ViewTable = () => {
         }
        
       }  
-
  
       //const value = DataToSet.reduce((result, obj) => result[0], Object.values(DataToSet[0]));
       //console.log(DataToSet[0] ? DataToSet.reduce((result, obj) => result, Object.values(DataToSet)) : 'no')
@@ -665,11 +644,11 @@ const ViewTable = () => {
         <TextField label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
         
         <FormControl sx={{ minWidth: 180 }}>
-          <InputLabel>Zakres czasu (min)</InputLabel>
+          <InputLabel>Zakres danych (ilość)</InputLabel>
           <Select 
           onChange={(e) => setRangeTime(e.target.value)}
-          defaultValue={'no_selected'}
-          label={'Zakres czasu m'}
+          defaultValue={10}
+          label={'Zakres danych ilo'}
           > 
           <MenuItem value={'no_selected'} selected>Nie wybrano</MenuItem>
             {AvailableTime.map(item => <MenuItem value={item.item}>{item.item}</MenuItem>)}
@@ -684,7 +663,7 @@ const ViewTable = () => {
                 <LibraryAddCheckIcon style={{ fontSize: '36px', margin: '7px 15px 15px 0px' }}/>
                 Szczegóły
             </h2>
-            <Line options={options} data={data} />;  
+            <Line options={options} data={data} />
     </div>
     <div className='widget_bigger_ landscape w-50-m-100' style={{ margin: '10px 20px 10px 7.5px' }} >
             <h2 className='container-row justify-start'>
