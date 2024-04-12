@@ -224,10 +224,7 @@ const ViewTable = () => {
   const [EstimatedDate, setEstimatedDate] = useState('')
   const [RangeTime, setRangeTime] = useState(20)
   const [NumberFields, setNumberFields] = useState(2)
-  const [inputEnabled, setInputEnabled] = useState(true)
-
-  //console.log(DataToSet[0] != undefined ? Object.getOwnPropertyNames(DataToSet[0]) : [])
-
+  const [inputEnabled, setInputEnabled] = useState(true) 
    
   const [Name, setName] = useState('')
   const [IPAddress, setIPAddress] = useState('')
@@ -325,8 +322,7 @@ const ViewTable = () => {
         },
       },
     },
-  };
-
+  }; 
   
   const indexToAccess = 0; // Index of the property you want to access
   const newPropertyName = "FirstUserProperty";
@@ -603,7 +599,7 @@ const ViewTable = () => {
             </h2>
             <TableContainer className='Table__'  component={Paper} >
             <Table sx={{ minWidth: 700}} aria-label="customized table">
-              <TableHead>
+              <TableHead className='customized_table__'>
                 <TableRow
                 className='flex_fix_table'
                 > 
@@ -812,9 +808,8 @@ const ViewTable = () => {
               onChange={(newValue) => setDateUpdated(newValue)}
               label="Data aktualizacji" />
               </LocalizationProvider>
-              </div>
-               
-               <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
+              </div> 
+              <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
              style={{ display:    
               NumberFields == 6 ||
               NumberFields == 7 ||

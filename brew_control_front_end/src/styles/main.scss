@@ -843,6 +843,25 @@ footer {
     max-height: 600px;
 }
 
+
+.customized_table__ {
+    position: relative;
+    z-index: 2;
+}
+
+.customized_table__::after {
+    display: flex;
+    top: 0px;
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+    height: 60px;
+    width: 100%;
+    background: #000;
+    z-index: -1;
+    content: "lorem";
+}
+
 /*.flex_fix_table {
     display: flex !important;
     width: 100%;
