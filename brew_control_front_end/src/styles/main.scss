@@ -843,6 +843,12 @@ footer {
     max-height: 600px;
 }
 
+/*.flex_fix_table {
+    display: flex !important;
+    width: 100%;
+    justify-content: space-between
+}*/
+
 @media (min-width: 599px) {
 
     .container-row-column-mobile {

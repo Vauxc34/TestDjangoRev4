@@ -62,7 +62,7 @@ import TableRowsIcon from '@mui/icons-material/TableRows';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { parse } from 'papaparse';
 import { toast } from 'react-toastify';
-import { CheckBox } from '@mui/icons-material';
+import { AlignHorizontalCenter, CheckBox, OtherHouses } from '@mui/icons-material';
 import { faker } from '@faker-js/faker';
 
 /* */
@@ -219,12 +219,16 @@ const ViewTable = () => {
   const [Doc, setDoc] = useState('')
   const [DocDesc, setDocDesc] = useState('')
   const [DataToSet, setDataToSet] = useState([   ])
+  const [UpdatedData, setUpdatedData] = useState([])
   //const [EstimatedHours, setEstimatedHours] = useState('')
   const [EstimatedDate, setEstimatedDate] = useState('')
   const [RangeTime, setRangeTime] = useState(20)
   const [NumberFields, setNumberFields] = useState(2)
   const [inputEnabled, setInputEnabled] = useState(true)
 
+  //console.log(DataToSet[0] != undefined ? Object.getOwnPropertyNames(DataToSet[0]) : [])
+
+   
   const [Name, setName] = useState('')
   const [IPAddress, setIPAddress] = useState('')
   const [RegistrationFirst, setRegistrationFirst] = useState('')
@@ -237,6 +241,7 @@ const ViewTable = () => {
   const [IsEnabled, setIsEnabled] = useState(false)
   const [SelectedUser, setSelectedUser] = useState('')
   const [UsersList, setUsersList] = useState([])
+  const [TableHeaders, setTableHeaders] = useState([])
 
   function FetchUsersToArr() {
 
@@ -261,15 +266,23 @@ const ViewTable = () => {
         setUsersList(data);
       })
       .catch(error => {
-        console.error('There was a problem with your fetch operation:', error)}) 
-
-    ///setUsersList()
+        console.error('There was a problem with your fetch operation:', error)})  
 
   }
 
   useEffect(() => {
     FetchUsersToArr()
   }, [])
+
+  function FetchTableName() {
+    if(DataToSet[0] != undefined) {
+      setTableHeaders(Object.getOwnPropertyNames(DataToSet[0]))
+    }
+  } 
+
+  useEffect(() => {
+    FetchTableName()
+  }, [DataToSet])
 
   const [itemNb, setItemNb] = useState(5);
   const [seriesNb, setSeriesNb] = useState(2);
@@ -313,28 +326,89 @@ const ViewTable = () => {
       },
     },
   };
+
   
-  const labels = DataToSet.map((item) => item.date.slice(-9)).slice(0,10)
+  const indexToAccess = 0; // Index of the property you want to access
+  const newPropertyName = "FirstUserProperty";
+  const newPropertyName1 = "SecondUserProperty";
+  const newPropertyName2 = "ThirdUserProperty";      
+  const newPropertyName3 = "FourthUserProperty";      
+  const newPropertyName4 = "FifthUserProperty";      
+  const newPropertyName5 = "SixthUserProperty";      
+
+  
+  const labels = DataToSet.map((obj, item, index) => {
+    const updatedObj = { ...obj };   
+    const keys = Object.keys(obj);
+    for (let i = 0; i < keys.length; i++) {
+        if (i === indexToAccess) {
+            updatedObj[newPropertyName] = obj[keys[i]]; 
+            updatedObj[newPropertyName1] = obj[keys[1]];
+            updatedObj[newPropertyName2] = obj[keys[2]]; 
+            updatedObj[newPropertyName3] = obj[keys[3]]; 
+            updatedObj[newPropertyName4] = obj[keys[4]];
+            updatedObj[newPropertyName5] = obj[keys[5]];
+        } else {
+            updatedObj[keys[i]] = obj[keys[i]];
+        }
+    } 
+    return updatedObj.FirstUserProperty.slice(-9).slice(0,10)})
+
+  /*console.log(
+    DataToSet.map((obj, item, index) => {
+      const updatedObj = { ...obj };   
+      const keys = Object.keys(obj);
+      for (let i = 0; i < keys.length; i++) {
+          if (i === indexToAccess) {
+              updatedObj[newPropertyName] = obj[keys[i]]; 
+              updatedObj[newPropertyName1] = obj[keys[1]];
+              updatedObj[newPropertyName2] = obj[keys[2]]; 
+              updatedObj[newPropertyName3] = obj[keys[3]]; 
+              updatedObj[newPropertyName4] = obj[keys[4]];
+              updatedObj[newPropertyName5] = obj[keys[5]];
+          } else {
+              updatedObj[keys[i]] = obj[keys[i]];
+          }
+      } 
+      return updatedObj.SixthUserProperty})
+  )*/
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Prędkość rolki #1',
-        data: DataToSet.map((item) => item.Predk_Rolka_1),
+        label: TableHeaders[5] ? TableHeaders[5] : 'Brak danych',
+        data: DataToSet.map((obj, item, index) => {
+          const updatedObj = { ...obj };   
+          const keys = Object.keys(obj);
+          for (let i = 0; i < keys.length; i++) {
+              if (i === indexToAccess) {
+                  updatedObj[newPropertyName] = obj[keys[i]]; 
+                  updatedObj[newPropertyName1] = obj[keys[1]];
+                  updatedObj[newPropertyName2] = obj[keys[2]]; 
+                  updatedObj[newPropertyName3] = obj[keys[3]]; 
+                  updatedObj[newPropertyName4] = obj[keys[4]];
+                  updatedObj[newPropertyName5] = obj[keys[5]];
+              } else {
+                  updatedObj[keys[i]] = obj[keys[i]];
+              }
+          } 
+          return updatedObj.SixthUserProperty
+         
+        }),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         yAxisID: 'y',
       },
       {
-        label: 'Prędkość rolki #2',
-        data: DataToSet.map((item) => item.Predk_Rolka_2),
+        label: TableHeaders[4] ? TableHeaders[4] : 'Brak danych',
+        data: DataToSet.map((item) => item.Predk_Rolka_2 * 1),
         borderColor: 'rgb(34,139,34)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y1',
       },
       {
-        label: 'Wydajność chwilowa',
+        label: TableHeaders[3] ? TableHeaders[3] : 'Brak danych',
         data: DataToSet.map((item) => item.Wydajnosc_Chwilowa_Gran_T_h),
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -343,9 +417,7 @@ const ViewTable = () => {
     ],
   };
 
-  /* new chart */
-   
-     const valueFormatter = (value) => `${value}`;
+  /* new chart */ 
 
       let AvailableTime = [
       {item: 10}, 
@@ -403,17 +475,21 @@ const ViewTable = () => {
 
       function EstimatedTimeSetter() {
         if(DataToSet != []) {
-            setEstimatedDate(DataToSet.map(item => { return  {time: item.date.slice(-8) } } ))
+           // setEstimatedDate(DataToSet.map(item => { return  {time: item.date.slice(-8) } } ))
         }
        
       }
 
       function EstimatedDateSetter() {
         if(DataToSet != []) {
-            setEstimatedDate(DataToSet.map(item => { return  {time: item.date.slice(0, -9) } } ))
+         //   setEstimatedDate(DataToSet.map(item => { return  {time: item.date.slice(0, -9) } } ))
         }
        
       }  
+
+ 
+      //const value = DataToSet.reduce((result, obj) => result[0], Object.values(DataToSet[0]));
+      //console.log(DataToSet[0] ? DataToSet.reduce((result, obj) => result, Object.values(DataToSet)) : 'no')
 
       function FileSender() {
 
@@ -514,6 +590,7 @@ const ViewTable = () => {
         }
       }, [DocDesc]) 
 
+
   return ( 
 
     <div 
@@ -527,35 +604,54 @@ const ViewTable = () => {
             <TableContainer className='Table__'  component={Paper} >
             <Table sx={{ minWidth: 700}} aria-label="customized table">
               <TableHead>
-                <TableRow>
-                  <StyledTableCell>Data</StyledTableCell>
-                  <StyledTableCell>Godzina</StyledTableCell>
-                  <StyledTableCell align="right">Pomiar/Docisk rolek %</StyledTableCell>
-                  <StyledTableCell align="right">Napęd rolki zaciśnij</StyledTableCell> 
-                  <StyledTableCell align="right">Wydajność chwilowa</StyledTableCell> 
-                  <StyledTableCell align="right">Prędkość rolki #1</StyledTableCell> 
-                  <StyledTableCell align="right">Prędkość rolki #2</StyledTableCell> 
+                <TableRow
+                className='flex_fix_table'
+                > 
+                {TableHeaders == [] ? <StyledTableCell>Brak danych</StyledTableCell> :
+                TableHeaders.map((item, index) => <StyledTableCell>{item}</StyledTableCell>)} 
                 </TableRow>
               </TableHead>
-              <TableBody>
-
-                {DataToSet == [] ? <div>
+              <TableBody> 
+                {UpdatedData == [] ? <div>
                     <h2>Brak danych</h2>
-                </div> : 
-              DataToSet.map((item, index) =>
-              <StyledTableRow key={index}>
-                <StyledTableCell component="th" scope="row">
-                {item.date.slice(0, -8)}
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {item.date.slice(-9)}
-                </StyledTableCell>
-                <StyledTableCell align="right">{item.Pomiar_Docisk_Rolek_procent + '%'}</StyledTableCell> 
-                <StyledTableCell align="right">{item.Naped_Rolki_Zacisnij_StartAuto === "FALSE" ? "Nie zaciśnięta" : item.Naped_Rolki_Zacisnij_StartAuto}</StyledTableCell> 
-                <StyledTableCell align="right">{item.Wydajnosc_Chwilowa_Gran_T_h}</StyledTableCell> 
-                <StyledTableCell align="right">{item.Wydajnosc_Chwilowa_Gran_T_h}</StyledTableCell> 
-                <StyledTableCell align="right">{item.Predk_Rolka_2}</StyledTableCell> 
-              </StyledTableRow>)}
+                </div> : DataToSet.map((obj, item, index) => {
+                  const updatedObj = { ...obj };   
+                  const keys = Object.keys(obj);
+                  for (let i = 0; i < keys.length; i++) {
+                      if (i === indexToAccess) {
+                          updatedObj[newPropertyName] = obj[keys[i]]; 
+                          updatedObj[newPropertyName1] = obj[keys[1]];
+                          updatedObj[newPropertyName2] = obj[keys[2]]; 
+                          updatedObj[newPropertyName3] = obj[keys[3]]; 
+                          updatedObj[newPropertyName4] = obj[keys[4]];
+                          updatedObj[newPropertyName5] = obj[keys[5]];
+                      } else {
+                          updatedObj[keys[i]] = obj[keys[i]];
+                      }
+                  } 
+                  return <>
+                  <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.FirstUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.SecondUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.ThirdUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.FourthUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.FifthUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.SixthUserProperty}
+                  </StyledTableCell>
+                  </StyledTableRow>
+                  </>  
+                })} 
               </TableBody>
             </Table>
             </TableContainer> 
