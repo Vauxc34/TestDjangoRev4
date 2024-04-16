@@ -345,8 +345,26 @@ const ViewTable = () => {
         }
     }  
 
-    return updatedObj.FirstUserProperty.slice(-9)}) 
-  
+  return updatedObj.FirstUserProperty.slice(-9)}) 
+
+  let RangeOneItem = DataToSet.map((obj, item, index) => {
+    const updatedObj = { ...obj };   
+    const keys = Object.keys(obj);
+    for (let i = 0; i < keys.length; i++) {
+        if (i === indexToAccess) {
+            updatedObj[newPropertyName] = obj[keys[i]]; 
+            updatedObj[newPropertyName1] = obj[keys[1]];
+            updatedObj[newPropertyName2] = obj[keys[2]]; 
+            updatedObj[newPropertyName3] = obj[keys[3]]; 
+            updatedObj[newPropertyName4] = obj[keys[4]];
+            updatedObj[newPropertyName5] = obj[keys[5]];
+        } else {
+            updatedObj[keys[i]] = obj[keys[i]];
+        }
+    }  
+
+  return updatedObj})  
+
   const labels = EstimatedR.slice(0, RangeTime) 
 
   const data = {
@@ -655,17 +673,41 @@ const ViewTable = () => {
             </Select>
         </FormControl>   
 
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#1)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+           
+            <MenuItem>Dane #1</MenuItem>
+            </Select>
+        </FormControl> 
+
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#2)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+        
+          <MenuItem>Dane #2</MenuItem>
+            </Select>
+        </FormControl> 
+
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#3)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+      
+          <MenuItem>Dane #3</MenuItem>
+            </Select>
+        </FormControl> 
+
     </Stack>
     </div>
     <div className="container-row-column-mobile w-100 ">
-    <div className='widget_bigger_ landscape w-50-m-100' style={{ margin: '10px 7.5px 10px 20px' }} >
+    <div className='widget_bigger_ landscape w-50-m-100 DesktopWidthFixHalf_'>
             <h2 className='container-row justify-start'>
                 <LibraryAddCheckIcon style={{ fontSize: '36px', margin: '7px 15px 15px 0px' }}/>
                 Szczegóły
             </h2>
             <Line options={options} data={data} />
     </div>
-    <div className='widget_bigger_ landscape w-50-m-100' style={{ margin: '10px 20px 10px 7.5px' }} >
+    <div className='widget_bigger_ landscape w-50-m-100 DesktopWidthFixHalf__'>
             <h2 className='container-row justify-start'>
                 <PostAddIcon style={{ fontSize: '42px', margin: '2px 8px 4px 0px' }}/>
                 Nowe urządzenie
