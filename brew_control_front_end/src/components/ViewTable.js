@@ -236,7 +236,11 @@ const ViewTable = () => {
   const [IsEnabled, setIsEnabled] = useState(false)
   const [SelectedUser, setSelectedUser] = useState('')
   const [UsersList, setUsersList] = useState([])
+  const [ArrDevices, setArrDevices] = useState([])
+  const [ArrAddedDevices, setArrAddedDevices] = useState([])
   const [TableHeaders, setTableHeaders] = useState([])
+
+  console.log(ArrDevices)
 
   function FetchUsersToArr() {
 
@@ -250,7 +254,7 @@ const ViewTable = () => {
       }, 
     };
     
-    fetch(`${process.env.REACT_APP_API_LINK}/users/?format=json`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_LINK}/new-app/users/?format=json`, requestOptions)
       .then(response => {
         if (!response.ok) {
           throw new Error(response);
@@ -444,14 +448,16 @@ const ViewTable = () => {
       formData.append('description', DocDesc);
       
       const SecformData = new FormData();
-      SecformData.append('device-data', Name);
-      SecformData.append('device-data', IPAddress);
+      SecformData.append('name', Name);
+      SecformData.append('ip', IPAddress);
       SecformData.append('device-data', RegistrationFirst);
       SecformData.append('device-data', RegistrationAmmount);
       SecformData.append('device-data', DateUpdated);
       SecformData.append('device-data', Frequency);
       SecformData.append('device-data', IsEnabled);
-      SecformData.append('device-data', SelectedUser);
+      SecformData.append('user', 1);
+
+      //console.log(SelectedUser)
 
       function handleChangeFile(event) {
         setDoc(event.target.files[0]) 
@@ -497,7 +503,7 @@ const ViewTable = () => {
           body: formData
         };
         
-        fetch(`${process.env.REACT_APP_API_LINK}/files/`, requestOptions)
+        fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-files/`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error(response);
@@ -540,26 +546,19 @@ const ViewTable = () => {
 
         if(Name == '' || IPAddress == '' && RegistrationFirst == 2) {
           toast.error('Nie uzupełniono pól!')
-        } else if(Name == '' || IPAddress == '' || RegistrationFirst == 0 && RegistrationAmmount == 0) {
-          toast.error('Nie uzupełniono pól!')
-        } else if(Name == '' || IPAddress == '' || RegistrationFirst == 0 && RegistrationAmmount == 0 && DateUpdated == 4) {
-          toast.error('Nie uzupełniono pól!')
         } else { 
 
           toast.success('Dodano nowy rekord do bazy danych')
 
           let requestOptions = {
             method: 'POST', 
-            headers: {
-              //'Content-Type': 'application/json',
-              //'Access-Control-Allow-Origin': '*',
-              //'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+            headers: { 
               'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_LOGIN_AUTH}:${process.env.REACT_APP_PASSWD_AUTH}`)
             },
             body: SecformData
           };
           
-          fetch(`${process.env.REACT_APP_API_LINK}/whole-data/`, requestOptions)
+          fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-data/`, requestOptions)
             .then(response => {
               if (!response.ok) {
                 throw new Error(response);
@@ -568,12 +567,52 @@ const ViewTable = () => {
             })
             .then(data => {
               console.log(data);
+              /*setArrAddedDevices(...ArrAddedDevices, {
+                date_updated: null
+                enabled: null
+                frequency: null
+                ip: "131.23.142.31"
+                name: "NewDev"
+                reg_amount: null
+                reg_first: null
+                user: 1
+            })*/
             })
             .catch(error => {
               console.error('There was a problem with your fetch operation:', error)}) 
         }
 
       }
+
+      function FetchDevices() {
+
+          let requestOptions = {
+            method: 'GET', 
+            headers: {
+              //'Content-Type': 'application/json',
+              //'Access-Control-Allow-Origin': '*',
+              //'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+              'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_LOGIN_AUTH}:${process.env.REACT_APP_PASSWD_AUTH}`)
+            }, 
+          };
+          
+          fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-data/?format=json`, requestOptions)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(response);
+              }
+              return response.json();
+            })
+            .then(data => {
+              setArrDevices(data);
+            })
+            .catch(error => {
+              console.error('There was a problem with your fetch operation:', error)}) 
+        }
+
+      useEffect(() => {
+        FetchDevices()
+      }, [])
  
       useEffect(() => {
         if(DocDesc == '') {
@@ -582,7 +621,6 @@ const ViewTable = () => {
           setInputEnabled(false)
         }
       }, [DocDesc]) 
-
 
   return ( 
 
@@ -651,17 +689,17 @@ const ViewTable = () => {
               
     </div>
     <div className='widget_bigger_ landscape'>
-    <Stack spacing={2} direction="row">
+    <Stack spacing={2} direction="row" className='wrap'>
       <Button 
       color={inputEnabled ? 'error' : 'info'}  
       variant="contained" >
-      <input disabled={inputEnabled} className='SelectorThumbnail' onChange={handleChangeFile} accept='text/csv' style={{ position: 'absolute', overflow: 'hidden', height: '100%', width: '100%', opacity: 0 }} type="file"/>
+      <input disabled={inputEnabled} className='SelectorThumbnail' onChange={handleChangeFile} accept='text/csv' style={{ position: 'absolute', overflow: 'hidden', height: '100%', width: '100%', opacity: 0, margin: '0 10px' }} type="file"/>
       {inputEnabled ? 'Brak opisu' : ' Prześlij'}<AddCircleOutlineIcon style={{ margin: '0 -2.5px 0 5px' }}/>
         </Button>
 
-        <TextField label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
+        <TextField  style={{ margin: '0 10px' }} label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
         
-        <FormControl sx={{ minWidth: 180 }}>
+        <FormControl sx={{ minWidth: 180 }} style={{ margin: '0 10px' }}>
           <InputLabel>Zakres danych (ilość)</InputLabel>
           <Select 
           onChange={(e) => setRangeTime(e.target.value)}
@@ -671,7 +709,9 @@ const ViewTable = () => {
           <MenuItem value={'no_selected'} selected>Nie wybrano</MenuItem>
             {AvailableTime.map(item => <MenuItem value={item.item}>{item.item}</MenuItem>)}
             </Select>
-        </FormControl>   
+        </FormControl> 
+
+        {/*  
 
         <FormControl sx={{ minWidth: 180 }}>
           <InputLabel>Wybrany element (#1)</InputLabel>
@@ -696,6 +736,8 @@ const ViewTable = () => {
           <MenuItem>Dane #3</MenuItem>
             </Select>
         </FormControl> 
+
+              */}
 
     </Stack>
     </div>
@@ -870,7 +912,10 @@ const ViewTable = () => {
                </InputLabel>
               <Checkbox value={IsEnabled} onChange={(e) => setIsEnabled(e.target.value)} aria-label='Włączony?' /> 
               </div> 
-              <FormControl fullWidth style={{ display: NumberFields == 8 ? 'flex' : 'none'}} >
+              <div className='container-row wrap align-items-center mg-15'
+              style={{ marginLeft: 0, marginRight: 0 }}
+              >
+              <FormControl fullWidth >
           <InputLabel>Użytkownik</InputLabel>
           <Select 
           
@@ -878,29 +923,54 @@ const ViewTable = () => {
           onChange={(e) => setSelectedUser(e.target.value)} 
           label={'Użytkown'}
           >  
-
           {UsersList == [] ? <MenuItem value={'Jan'}>Jan</MenuItem> :
-          
-          UsersList.map(item => <MenuItem value={item.first_name}>
-          {item.first_name + ' ' + item.last_name}
-          </MenuItem> )
-
-          } 
+          UsersList.map(item => <MenuItem value={item}>
+          {item.email}
+          </MenuItem>)} 
             </Select>
               </FormControl>  
+              </div>
             <Stack spacing={2} direction="row">
             <Button onClick={RecordAdd} variant="contained" style={{ margin: '15px 0' }}>
             Dodaj urządzenie<AddCircleOutlineIcon style={{ margin: '0 -2.5px 0 5px' }}/>
             </Button> 
             </Stack>
+            <div className='container-column wrap align-items-center mg-5'>
+              {ArrDevices == [] ? <h2>No data</h2> : ArrDevices.map(item =>  
+              
+              
 
+              <div className='tile_normal_ justify-start w-100'>
+              <div className='container-column'>             
+              <div className='container-column pd-10 w-100 self-align-start'>                
+              <h1>Nazwa: {item.name}</h1>
+              
+              <div className='container-row justify-start w-100 align-items-center'>
+              <h4>Adres IP: </h4>
+              <h4 className='container-row align-items-center pointer-cursor linker_btn greener_bgc mg-10' 
+              style={{ marginLeft: '8.5px', marginRight: '8.5px' }}>
+             {item.ip}
+              </h4> 
+              
+              </div>
+              <span>Numer rejestracji: {item.reg_first == null ? 'Nie podano' : item.reg_first}</span> 
+              <span>Wartość rejestracji: {item.reg_amount == null ? 'Nie podano' : item.reg_amount}</span> 
+              <span>Data aktualizacji: {item.date_updated == null ? 'Nie podano' : item.date_updated}</span> 
+              <h4 style={{ color: item.enabled == true ? 'green' : 'red' }}>Włączony: {item.enabled == true ? 'Tak' : 'Nie'}</h4> 
+              </div>
+              </div>
+              </div>
+
+        
+              
+            )}
+            </div>
         </div>
-
-
     </div>
     </div>
   </div>
   )
 }
+
 
 export default ViewTable
