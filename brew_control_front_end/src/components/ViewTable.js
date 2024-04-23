@@ -238,9 +238,7 @@ const ViewTable = () => {
   const [UsersList, setUsersList] = useState([])
   const [ArrDevices, setArrDevices] = useState([])
   const [ArrAddedDevices, setArrAddedDevices] = useState([])
-  const [TableHeaders, setTableHeaders] = useState([])
-
-  console.log(ArrDevices)
+  const [TableHeaders, setTableHeaders] = useState([]) 
 
   function FetchUsersToArr() {
 
@@ -566,7 +564,7 @@ const ViewTable = () => {
               return response.json();
             })
             .then(data => {
-              console.log(data);
+              //console.log(data);
               /*setArrAddedDevices(...ArrAddedDevices, {
                 date_updated: null
                 enabled: null
@@ -577,7 +575,7 @@ const ViewTable = () => {
                 reg_first: null
                 user: 1
             })*/
-            })
+            }).then(window.location.reload())
             .catch(error => {
               console.error('There was a problem with your fetch operation:', error)}) 
         }
