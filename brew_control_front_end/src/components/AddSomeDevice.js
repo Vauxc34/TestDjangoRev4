@@ -212,7 +212,7 @@ const StyledButton = styled('button')(
 `,
 );
 
-const ViewTable = () => {
+const AddSomeDevice = () => {
 
   ChartJS.register(
     CategoryScale,
@@ -605,14 +605,14 @@ const ViewTable = () => {
   className="container-column w-100 blacker_orange"
   style={{ minHeight: '100vh' }}>
     <div className='widget_bigger_ landscape'>
-    <h2 className='container-row justify-start'
-             
+            <h2 className='container-row justify-start'
+            
             >
             <Menu >
         <a id="home" className="menu-item" href="/">Główna</a>
         <a id="about" className="menu-item" href="/add-device">Urządzenia</a>
       </Menu>
-                Tabela informacji
+                Lista urządzeń
             </h2>
             <TableContainer className='Table__'  component={Paper} >
             <Table sx={{ minWidth: 700}} aria-label="customized table">
@@ -669,43 +669,237 @@ const ViewTable = () => {
             </Table>
             </TableContainer> 
               
-    </div>
-    <div className='widget_bigger_ landscape'>
-    <Stack spacing={2} direction="row">
-      <Button 
-      color={inputEnabled ? 'error' : 'info'}  
-      variant="contained" >
-      <input disabled={inputEnabled} className='SelectorThumbnail' onChange={handleChangeFile} accept='text/csv' style={{ position: 'absolute', overflow: 'hidden', height: '100%', width: '100%', opacity: 0 }} type="file"/>
-      {inputEnabled ? 'Brak opisu' : ' Prześlij'}<AddCircleOutlineIcon style={{ margin: '0 -2.5px 0 5px' }}/>
-        </Button>
-
-        <TextField label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
-        
-        <FormControl sx={{ minWidth: 180 }}>
-          <InputLabel>Zakres danych (ilość)</InputLabel>
-          <Select 
-          onChange={(e) => setRangeTime(e.target.value)}
-          defaultValue={10}
-          label={'Zakres danych ilo'}
-          > 
-          <MenuItem value={'no_selected'} selected>Nie wybrano</MenuItem>
-            {AvailableTime.map(item => <MenuItem value={item.item}>{item.item}</MenuItem>)}
-            </Select>
-        </FormControl>   
-
-    </Stack>
-    </div>
-    <div className="container-row-column-mobile w-100 ">
-    <div className='widget_bigger_ landscape w-100'>
+    </div> 
+    <div className="container-row-column-mobile w-100 ">  
+    <div className='widget_bigger_ landscape w-100' >
             <h2 className='container-row justify-start'>
-                <LibraryAddCheckIcon style={{ fontSize: '36px', margin: '7px 15px 15px 0px' }}/>
-                Szczegóły
-            </h2>
-            <Line options={options} data={data} />
+                <PostAddIcon style={{ fontSize: '42px', margin: '2px 8px 4px 0px' }}/>
+                Nowe urządzenie
+            </h2> 
+            <div className='mg-10'>
+              <Stack spacing={2} direction={'column'}>
+
+              <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Ilość pól</InputLabel>
+          <Select 
+          onChange={(e) => setNumberFields(e.target.value)}
+          defaultValue={2}
+          label={'Ilość p'}
+          >  
+             <MenuItem value={2}>{2}</MenuItem> 
+             <MenuItem value={3}>{3}</MenuItem> 
+             <MenuItem value={4}>{4}</MenuItem>  
+             <MenuItem value={5}>{5}</MenuItem>  
+             <MenuItem value={6}>{6}</MenuItem>  
+             <MenuItem value={7}>{7}</MenuItem>  
+             <MenuItem value={8}>{8}</MenuItem>  
+            </Select>
+        </FormControl>  
+                
+              <TextField fullWidth onChange={(e) => setName(e.target.value)} value={Name} style={{ display: 
+                NumberFields == 2 || 
+                NumberFields == 3 || 
+                NumberFields == 4 ||
+                NumberFields == 5 ||
+                NumberFields == 6 ||
+                NumberFields == 7 ||
+                NumberFields == 8 ? 
+                'block' : 'none' }} id="outlined-basic" label="Nazwa urządzenia" variant="filled" />
+              <TextField fullWidth onChange={(e) => setIPAddress(e.target.value)} value={IPAddress} style={{ display:  NumberFields == 2 || 
+                NumberFields == 3 || 
+                NumberFields == 4 ||
+                NumberFields == 5 ||
+                NumberFields == 6 ||
+                NumberFields == 7 ||
+                NumberFields == 8 ? 'block' : 'none' }} id="outlined-basic" label="Adres IP" variant="filled" />
+              <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
+              
+              style={{ display:  
+                NumberFields == 3 || 
+                NumberFields == 4 ||
+                NumberFields == 5 ||
+                NumberFields == 6 ||
+                NumberFields == 7 ||
+                NumberFields == 8 ? 'flex' : 'none' }}
+
+              > 
+              <InputLabel>
+              Rejestracja pierwsza:
+               </InputLabel>
+              <BaseNumberInput
+              onChange={(e) => setRegistrationFirst(e.target.value)} 
+              value={RegistrationFirst} 
+              style={{ margin: '0 15px' }}
+              slots={{
+              root: StyledInputRoot,
+              input: StyledInputElement,
+              incrementButton: StyledButton,
+              decrementButton: StyledButton,
+              }}
+              slotProps={{
+              incrementButton: {
+               children: '▴',
+              },
+              decrementButton: {
+               children: '▾',
+              },
+              }} 
+              />
+               </div>
+              <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
+              style={{ display:  
+                NumberFields == 4 ||
+                NumberFields == 5 ||
+                NumberFields == 6 ||
+                NumberFields == 7 ||
+                NumberFields == 8 ? 'flex' : 'none' }}
+              > 
+              <InputLabel>
+              Numer Rejestracji:
+               </InputLabel>
+              <BaseNumberInput  
+              onChange={(e) => setRegistrationAmmount(e.target.value)} 
+              value={RegistrationAmmount}
+              style={{ margin: '0 15px' }} 
+              slots={{
+              root: StyledInputRoot,
+              input: StyledInputElement,
+              incrementButton: StyledButton,
+              decrementButton: StyledButton,
+              }}
+              slotProps={{
+              incrementButton: {
+               children: '▴',
+              },
+              decrementButton: {
+               children: '▾',
+              },
+              }} 
+              />
+              </div>
+              <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
+             style={{ display:   
+              NumberFields == 5 ||
+              NumberFields == 6 ||
+              NumberFields == 7 ||
+              NumberFields == 8 ? 'flex' : 'none' }}
+              > 
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker 
+              style={{ margin: '0 15px' }}
+              ref={DatePickRef}
+              defaultValue={dayjs(Date.now())}
+              value={DateUpdated}
+              onChange={(newValue) => setDateUpdated(newValue)}
+              label="Data aktualizacji" />
+              </LocalizationProvider>
+              </div> 
+              <div className='container-row wrap align-items-center w-100 mg-10 justify-start'
+             style={{ display:    
+              NumberFields == 6 ||
+              NumberFields == 7 ||
+              NumberFields == 8 ? 'flex' : 'none' }}
+              > 
+              <InputLabel>
+              Częstotliwość:
+               </InputLabel>
+              <BaseNumberInput
+              style={{ margin: '0 15px' }}
+              onChange={(e) => setFrequency(e.target.value)}
+              value={Frequency}
+              slots={{
+              root: StyledInputRoot,
+              input: StyledInputElement,
+              incrementButton: StyledButton,
+              decrementButton: StyledButton,
+              }}
+              slotProps={{
+              incrementButton: {
+               children: '▴',
+              },
+              decrementButton: {
+               children: '▾',
+              },
+              }} 
+              />
+              </div> 
+              </Stack> 
+              <div className='container-row wrap align-items-center mg-15'
+              
+              style={{ display: NumberFields == 7 || NumberFields == 8 ? 'flex' : 'none'}}
+               
+              > 
+              <InputLabel>
+              Włączony?
+               </InputLabel>
+              <Checkbox value={IsEnabled} onChange={(e) => setIsEnabled(e.target.value)} aria-label='Włączony?' /> 
+              </div> 
+              <FormControl fullWidth style={{ display: NumberFields == 8 ? 'flex' : 'none'}} >
+          <InputLabel>Użytkownik</InputLabel>
+          <Select 
+          
+          value={SelectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)} 
+          label={'Użytkown'}
+          >  
+
+          {UsersList == [] ? <MenuItem value={'Jan'}>Jan</MenuItem> :
+          
+          UsersList.map(item => <MenuItem value={item.first_name}>
+          {item.first_name + ' ' + item.last_name}
+          </MenuItem> )
+
+          } 
+            </Select>
+              </FormControl>  
+            <Stack spacing={2} direction="row">
+            <Button onClick={RecordAdd} variant="contained" style={{ margin: '15px 0' }}>
+            Dodaj urządzenie<AddCircleOutlineIcon style={{ margin: '0 -2.5px 0 5px' }}/>
+            </Button> 
+            </Stack>
+
+        </div>
+
+        <div>
+
+          {DeviceArr != [] ? DeviceArr.map((item, index) => <>
+            <Card sx={{ minWidth: 275, margin: '10px 0px' }}>
+        <CardContent>
+          <span>
+          {item.device_name}
+          </span>
+          <h2>
+          {item.device_ip_address}
+          </h2>
+          <Typography sx={{ mb: .5 }} color="text.secondary" variant='p'>
+          {item.reg_number}
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} style={{ color: '#000' }} >
+          {item.reg_ammount}
+          </Typography>
+          <Typography variant="body2">
+          {item.date_updated == undefined ? '' : item.date_updated.toString()}
+          </Typography>
+          <Typography sx={{ mb: 1.65 }} style={{ color: item.optionEnabled == false ? 'red' : 'green' }} >
+          {item.optionEnabled == false ? 'Wyłączone' : 'Włączone'}
+          </Typography>
+        </CardContent>
+        <CardActions>
+        
+        </CardActions>
+      </Card>
+
+
+          </>) : "Brak rekordów"}
+
+       
+        </div>
+
+
     </div>
     </div>
   </div>
   )
 }
 
-export default ViewTable
+export default AddSomeDevice
