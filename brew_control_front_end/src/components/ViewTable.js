@@ -244,7 +244,9 @@ const ViewTable = () => {
   const [IsEnabled, setIsEnabled] = useState(false)
   const [SelectedUser, setSelectedUser] = useState('')
   const [UsersList, setUsersList] = useState([])
-  const [TableHeaders, setTableHeaders] = useState([])
+  const [ArrDevices, setArrDevices] = useState([])
+  const [ArrAddedDevices, setArrAddedDevices] = useState([])
+  const [TableHeaders, setTableHeaders] = useState([]) 
 
   function FetchUsersToArr() {
 
@@ -258,7 +260,7 @@ const ViewTable = () => {
       }, 
     };
     
-    fetch(`${process.env.REACT_APP_API_LINK}/users/?format=json`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_LINK}/new-app/users/?format=json`, requestOptions)
       .then(response => {
         if (!response.ok) {
           throw new Error(response);
@@ -378,8 +380,26 @@ const ViewTable = () => {
         }
     }  
 
-    return updatedObj.FirstUserProperty.slice(-9)}) 
-  
+  return updatedObj.FirstUserProperty.slice(-9)}) 
+
+  let RangeOneItem = DataToSet.map((obj, item, index) => {
+    const updatedObj = { ...obj };   
+    const keys = Object.keys(obj);
+    for (let i = 0; i < keys.length; i++) {
+        if (i === indexToAccess) {
+            updatedObj[newPropertyName] = obj[keys[i]]; 
+            updatedObj[newPropertyName1] = obj[keys[1]];
+            updatedObj[newPropertyName2] = obj[keys[2]]; 
+            updatedObj[newPropertyName3] = obj[keys[3]]; 
+            updatedObj[newPropertyName4] = obj[keys[4]];
+            updatedObj[newPropertyName5] = obj[keys[5]];
+        } else {
+            updatedObj[keys[i]] = obj[keys[i]];
+        }
+    }  
+
+  return updatedObj})  
+
   const labels = EstimatedR.slice(0, RangeTime) 
 
   console.log(TableHeaders)
@@ -457,14 +477,16 @@ const ViewTable = () => {
       formData.append('description', DocDesc);
       
       const SecformData = new FormData();
-      SecformData.append('device-data', Name);
-      SecformData.append('device-data', IPAddress);
+      SecformData.append('name', Name);
+      SecformData.append('ip', IPAddress);
       SecformData.append('device-data', RegistrationFirst);
       SecformData.append('device-data', RegistrationAmmount);
       SecformData.append('device-data', DateUpdated);
       SecformData.append('device-data', Frequency);
       SecformData.append('device-data', IsEnabled);
-      SecformData.append('device-data', SelectedUser);
+      SecformData.append('user', 1);
+
+      //console.log(SelectedUser)
 
       function handleChangeFile(event) {
         setDoc(event.target.files[0]) 
@@ -510,7 +532,7 @@ const ViewTable = () => {
           body: formData
         };
         
-        fetch(`${process.env.REACT_APP_API_LINK}/files/`, requestOptions)
+        fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-files/`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error(response);
@@ -553,26 +575,19 @@ const ViewTable = () => {
 
         if(Name == '' || IPAddress == '' && RegistrationFirst == 2) {
           toast.error('Nie uzupełniono pól!')
-        } else if(Name == '' || IPAddress == '' || RegistrationFirst == 0 && RegistrationAmmount == 0) {
-          toast.error('Nie uzupełniono pól!')
-        } else if(Name == '' || IPAddress == '' || RegistrationFirst == 0 && RegistrationAmmount == 0 && DateUpdated == 4) {
-          toast.error('Nie uzupełniono pól!')
         } else { 
 
           toast.success('Dodano nowy rekord do bazy danych')
 
           let requestOptions = {
             method: 'POST', 
-            headers: {
-              //'Content-Type': 'application/json',
-              //'Access-Control-Allow-Origin': '*',
-              //'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+            headers: { 
               'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_LOGIN_AUTH}:${process.env.REACT_APP_PASSWD_AUTH}`)
             },
             body: SecformData
           };
           
-          fetch(`${process.env.REACT_APP_API_LINK}/whole-data/`, requestOptions)
+          fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-data/`, requestOptions)
             .then(response => {
               if (!response.ok) {
                 throw new Error(response);
@@ -580,8 +595,18 @@ const ViewTable = () => {
               return response.json();
             })
             .then(data => {
-              console.log(data);
-            })
+              //console.log(data);
+              /*setArrAddedDevices(...ArrAddedDevices, {
+                date_updated: null
+                enabled: null
+                frequency: null
+                ip: "131.23.142.31"
+                name: "NewDev"
+                reg_amount: null
+                reg_first: null
+                user: 1
+            })*/
+            }).then(window.location.reload())
             .catch(error => {
               console.error('There was a problem with your fetch operation:', error)}) 
         }
@@ -589,6 +614,36 @@ const ViewTable = () => {
         AddNewDevice()
 
       }
+
+      function FetchDevices() {
+
+          let requestOptions = {
+            method: 'GET', 
+            headers: {
+              //'Content-Type': 'application/json',
+              //'Access-Control-Allow-Origin': '*',
+              //'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+              'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_LOGIN_AUTH}:${process.env.REACT_APP_PASSWD_AUTH}`)
+            }, 
+          };
+          
+          fetch(`${process.env.REACT_APP_API_LINK}/new-app/my-data/?format=json`, requestOptions)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(response);
+              }
+              return response.json();
+            })
+            .then(data => {
+              setArrDevices(data);
+            })
+            .catch(error => {
+              console.error('There was a problem with your fetch operation:', error)}) 
+        }
+
+      useEffect(() => {
+        FetchDevices()
+      }, [])
  
       useEffect(() => {
         if(DocDesc == '') {
@@ -597,7 +652,6 @@ const ViewTable = () => {
           setInputEnabled(false)
         }
       }, [DocDesc]) 
-
 
   return ( 
 
@@ -671,17 +725,17 @@ const ViewTable = () => {
               
     </div>
     <div className='widget_bigger_ landscape'>
-    <Stack spacing={2} direction="row">
+    <Stack spacing={2} direction="row" className='wrap'>
       <Button 
       color={inputEnabled ? 'error' : 'info'}  
       variant="contained" >
-      <input disabled={inputEnabled} className='SelectorThumbnail' onChange={handleChangeFile} accept='text/csv' style={{ position: 'absolute', overflow: 'hidden', height: '100%', width: '100%', opacity: 0 }} type="file"/>
+      <input disabled={inputEnabled} className='SelectorThumbnail' onChange={handleChangeFile} accept='text/csv' style={{ position: 'absolute', overflow: 'hidden', height: '100%', width: '100%', opacity: 0, margin: '0 10px' }} type="file"/>
       {inputEnabled ? 'Brak opisu' : ' Prześlij'}<AddCircleOutlineIcon style={{ margin: '0 -2.5px 0 5px' }}/>
         </Button>
 
-        <TextField label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
+        <TextField  style={{ margin: '0 10px' }} label={'Opis'} value={DocDesc} onChange={(e) => setDocDesc(e.target.value)} ></TextField>
         
-        <FormControl sx={{ minWidth: 180 }}>
+        <FormControl sx={{ minWidth: 180 }} style={{ margin: '0 10px' }}>
           <InputLabel>Zakres danych (ilość)</InputLabel>
           <Select 
           onChange={(e) => setRangeTime(e.target.value)}
@@ -691,7 +745,35 @@ const ViewTable = () => {
           <MenuItem value={'no_selected'} selected>Nie wybrano</MenuItem>
             {AvailableTime.map(item => <MenuItem value={item.item}>{item.item}</MenuItem>)}
             </Select>
-        </FormControl>   
+        </FormControl> 
+
+        {/*  
+
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#1)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+           
+            <MenuItem>Dane #1</MenuItem>
+            </Select>
+        </FormControl> 
+
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#2)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+        
+          <MenuItem>Dane #2</MenuItem>
+            </Select>
+        </FormControl> 
+
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel>Wybrany element (#3)</InputLabel>
+          <Select label={'Zakres danych ilo'}> 
+      
+          <MenuItem>Dane #3</MenuItem>
+            </Select>
+        </FormControl> 
+
+              */}
 
     </Stack>
     </div>
@@ -707,5 +789,6 @@ const ViewTable = () => {
   </div>
   )
 }
+
 
 export default ViewTable
