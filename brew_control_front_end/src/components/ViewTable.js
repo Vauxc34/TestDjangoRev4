@@ -363,6 +363,13 @@ const ViewTable = () => {
   const newPropertyName3 = "FourthUserProperty";      
   const newPropertyName4 = "FifthUserProperty";      
   const newPropertyName5 = "SixthUserProperty";   
+  const newPropertyName6 = "SeventhUserProperty";   
+  const newPropertyName7 = "EightUserProperty";   
+  const newPropertyName8 = "NineUserProperty";   
+  const newPropertyName9 = "TenUserProperty";   
+  const newPropertyName10 = "ElevenUserProperty";   
+  const newPropertyName11 = "TwelveUserProperty";   
+  const newPropertyName12 = "ThirteenUserProperty";   
   
   let EstimatedR = DataToSet.map((obj, item, index) => {
     const updatedObj = { ...obj };   
@@ -375,6 +382,13 @@ const ViewTable = () => {
             updatedObj[newPropertyName3] = obj[keys[3]]; 
             updatedObj[newPropertyName4] = obj[keys[4]];
             updatedObj[newPropertyName5] = obj[keys[5]];
+            updatedObj[newPropertyName6] = obj[keys[6]];
+            updatedObj[newPropertyName7] = obj[keys[7]];
+            updatedObj[newPropertyName8] = obj[keys[8]];
+            updatedObj[newPropertyName9] = obj[keys[9]];
+            updatedObj[newPropertyName10] = obj[keys[10]];
+            updatedObj[newPropertyName11] = obj[keys[11]];
+            updatedObj[newPropertyName12] = obj[keys[12]];
         } else {
             updatedObj[keys[i]] = obj[keys[i]];
         }
@@ -692,6 +706,13 @@ const ViewTable = () => {
                           updatedObj[newPropertyName3] = obj[keys[3]]; 
                           updatedObj[newPropertyName4] = obj[keys[4]];
                           updatedObj[newPropertyName5] = obj[keys[5]];
+                          updatedObj[newPropertyName6] = obj[keys[6]];
+                          updatedObj[newPropertyName7] = obj[keys[7]];
+                          updatedObj[newPropertyName8] = obj[keys[8]];
+                          updatedObj[newPropertyName9] = obj[keys[9]];
+                          updatedObj[newPropertyName10] = obj[keys[10]];
+                          updatedObj[newPropertyName11] = obj[keys[11]];
+                          updatedObj[newPropertyName12] = obj[keys[12]];
                       } else {
                           updatedObj[keys[i]] = obj[keys[i]];
                       }
@@ -715,6 +736,27 @@ const ViewTable = () => {
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                   {updatedObj.SixthUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.SeventhUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.EightUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.NineUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.TenUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.ElevenUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.TwelveUserProperty}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                  {updatedObj.ThirteenUserProperty}
                   </StyledTableCell>
                   </StyledTableRow>
                   </>  
