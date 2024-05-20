@@ -674,7 +674,9 @@ const ViewTable = () => {
   style={{ minHeight: '100vh' }}>
     <div className='widget_bigger_ landscape'>
     <h2 className='container-row justify-start'
-             
+             style={{
+              margin: '2px 0 10px'
+             }}
             >
             <Menu >
         <a id="home" className="menu-item" href="/">Główna</a>
